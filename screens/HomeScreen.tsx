@@ -1,25 +1,36 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import useCamera from '../hooks/useCamera';
+import { globalStyles } from '../styles/globalStyles';
+import { Camera } from 'expo-camera';
 
 const HomeScreen: React.FC = () => {
-    const { toggleCameraType } = useCamera();
+    const { cameraStatus, toggleCameraVisibility } = useCamera();
+    const navigation = useNavigation();
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button
+                    onPress={toggleCameraVisibility}
+                    title={cameraStatus.isVisible ? "Hide Camera" : "Show Camera"}
+                />
+            ),
+        });
+    }, [navigation, cameraStatus.isVisible]);
 
     return (
-        <View style={styles.container}>
-            <Text>Camera View</Text>
-            <Button title="Flip Camera" onPress={toggleCameraType} />
+        <View style={globalStyles.container}>
+            <Text>Welcome to the Budget Tracker</Text>
+            {cameraStatus.isVisible && (
+                <Camera
+                    style={globalStyles.camera}
+                    type={cameraStatus.type}
+                />
+            )}
         </View>
     );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-});
+};
 
 export default HomeScreen;

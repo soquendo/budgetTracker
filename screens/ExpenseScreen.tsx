@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, FlatList, Alert } from 'react-native';
+import { View, Text, Button, TextInput, FlatList, Alert } from 'react-native';
+import { globalStyles } from '../styles/globalStyles'; // Adjust the path as needed
 
 type ExpenseEntry = {
   id: string;
@@ -36,22 +37,22 @@ export default function ExpenseScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Category"
         value={category}
         onChangeText={setCategory}
       />
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Amount"
         keyboardType="numeric"
         value={amount}
         onChangeText={setAmount}
       />
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Description (optional)"
         value={description}
         onChangeText={setDescription}
@@ -62,7 +63,7 @@ export default function ExpenseScreen() {
         data={expenses}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
+          <View style={globalStyles.listItem}>
             <Text>{item.category}: ${item.amount.toFixed(2)}</Text>
             <Text>{item.description}</Text>
             <Button title="Delete" onPress={() => deleteExpense(item.id)} color="#ff6347" />
@@ -72,27 +73,3 @@ export default function ExpenseScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  input: {
-    height: 40,
-    marginBottom: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  listItem: {
-    padding: 10,
-    marginVertical: 8,
-    backgroundColor: '#f9f9f9',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-});

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, FlatList } from 'react-native';
+import { View, Text, Button, TextInput, FlatList, Alert } from 'react-native';
+import { globalStyles } from '../styles/globalStyles';
 
 type SavingEntry = {
   id: string;
@@ -13,9 +14,13 @@ export default function SavingsScreen() {
   const [amount, setAmount] = useState('');
 
   const addSaving = () => {
+    if (!goal || !amount) {
+      Alert.alert('Error', 'Please enter both a goal and an amount.');
+      return;
+    }
     const newEntry: SavingEntry = {
       id: Date.now().toString(),
-      goal: goal,
+      goal,
       amount: parseFloat(amount),
     };
     setSavingEntries([...savingEntries, newEntry]);
@@ -24,18 +29,18 @@ export default function SavingsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Saving Goal"
         value={goal}
         onChangeText={setGoal}
       />
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Amount"
-        value={amount}
         keyboardType="numeric"
+        value={amount}
         onChangeText={setAmount}
       />
       <Button title="Add Saving" onPress={addSaving} />
@@ -43,7 +48,7 @@ export default function SavingsScreen() {
         data={savingEntries}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
+          <View style={globalStyles.listItem}>
             <Text>{item.goal}: ${item.amount.toFixed(2)}</Text>
           </View>
         )}
@@ -51,24 +56,3 @@ export default function SavingsScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  input: {
-    height: 40,
-    marginBottom: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  listItem: {
-    padding: 10,
-    marginVertical: 8,
-    backgroundColor: '#f9f9f9',
-    borderColor: '#ddd',
-    borderWidth: 1,
-  },
-});

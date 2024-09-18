@@ -1,20 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Camera, CameraType } from 'expo-camera';
+import { Camera } from 'expo-camera';
 
 interface CameraState {
     hasPermission: boolean | null;
-    type: number;  // Assuming type is a number for CameraType.back/front
+    type: CameraType | null; 
+    isVisible: boolean;
 }
 
-interface UseCameraHook {
-    cameraStatus: CameraState;
-    toggleCameraType: () => void;
-}
-
-export default function useCamera(): UseCameraHook {
+export default function useCamera(): CameraState & { toggleCameraType: () => void } {
     const [cameraStatus, setCameraStatus] = useState<CameraState>({
         hasPermission: null,
-        type: CameraType ? CameraType.back : 1,
+        type: Camera.Constants?.Type.back || null, 
+        isVisible: false,
     });
 
     useEffect(() => {
@@ -30,11 +27,14 @@ export default function useCamera(): UseCameraHook {
     const toggleCameraType = () => {
         setCameraStatus(prevState => ({
             ...prevState,
-            type: prevState.type === (CameraType ? CameraType.back : 1)
-                  ? (CameraType ? CameraType.front : 0)
-                  : (CameraType ? CameraType.back : 1),
+            type: prevState.type === Camera.Constants?.Type.back
+                  ? Camera.Constants?.Type.front
+                  : Camera.Constants?.Type.back,
         }));
     };
 
-    return { cameraStatus, toggleCameraType };
+    return {
+        ...cameraStatus,
+        toggleCameraType,
+    };
 }

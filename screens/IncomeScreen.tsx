@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Button, TextInput, FlatList } from 'react-native';
+import { globalStyles } from '../styles/globalStyles';
 
 type IncomeEntry = {
   id: string;
@@ -24,15 +25,15 @@ export default function IncomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Income Source"
         value={source}
         onChangeText={setSource}
       />
       <TextInput
-        style={styles.input}
+        style={globalStyles.input}
         placeholder="Amount"
         value={amount}
         keyboardType="numeric"
@@ -43,7 +44,7 @@ export default function IncomeScreen() {
         data={incomeEntries}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.listItem}>
+          <View style={globalStyles.listItem}>
             <Text>{item.source}: ${item.amount.toFixed(2)}</Text>
           </View>
         )}
@@ -51,24 +52,3 @@ export default function IncomeScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  input: {
-    height: 40,
-    marginBottom: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  listItem: {
-    padding: 10,
-    marginVertical: 8,
-    backgroundColor: '#f9f9f9',
-    borderColor: '#ddd',
-    borderWidth: 1,
-  },
-});
